@@ -1,0 +1,7 @@
+{% if obj.is_entry %}
+    {{ obj.body|safe }}
+{% elif obj.is_blogmark %}
+    {% include "feeds/blogmark.html" %}
+{% elif obj.is_quotation %}
+    {% include "feeds/quotation.html" %}
+{% endif %}

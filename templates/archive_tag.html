@@ -1,0 +1,39 @@
+{% extends "smallhead.html" %}
+
+{% block title %}Simon Willison on {{ tags|join:" and " }}{% endblock %}
+
+{% block primary %}
+<h2 class="archive-tag-h2">{{ total }} item{{ total|pluralize }} tagged “{{ tags|join:"” and “" }}”</h2>
+
+{% if total > 10 %}
+    <form action="/search/" method="GET">
+        <input type="search" class="search-input" name="q" value="" placeholder="Search everything tagged '{{ tags|join:"' and '" }}'" style="width: 80%">
+        <input type="submit" class="search-submit" value="Search">
+        {% for tag in tags %}
+            <input type="hidden" name="tag" value="{{ tag }}">
+        {% endfor %}
+    </form>
+{% endif %}
+
+{% load blog_tags %}
+
+{% blog_mixed_list_with_dates items year_headers=1 %}
+
+{% include "_pagination.html" %}
+
+{% endblock %}
+
+{% block secondary %}
+<div class="metabox">
+{% if only_one_tag and tag.get_related_tags %}
+    <p><strong>Related</strong></p>
+    {% for related_tag in tag.get_related_tags %}
+        <a class="item-tag" href="{{ related_tag.get_absolute_url }}" rel="tag">
+            {{ related_tag }}
+            <span>{{ related_tag.total_count }}</span>
+        </a>
+    {% endfor %}
+    </p>
+{% endif %}
+</div>
+{% endblock %}
